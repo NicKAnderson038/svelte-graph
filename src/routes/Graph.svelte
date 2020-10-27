@@ -1,98 +1,98 @@
 <script>
-  import * as Pancake from "@sveltejs/pancake";
-  import { spring } from "svelte/motion";
-  import { onMount } from "svelte";
-  import data from "./data.js";
+  import * as Pancake from '@sveltejs/pancake'
+  import { spring } from 'svelte/motion'
+  import { onMount } from 'svelte'
+  import data from '../data/data'
 
-  const age1 = Math.max(...data.map((d) => d.age));
-  const year0 = Math.min(...data.map((d) => d.year));
-  const year1 = Math.max(...data.map((d) => d.year));
-  const max = Math.max(...data.map((d) => d.people));
+  const age1 = Math.max(...data.map((d) => d.age))
+  const year0 = Math.min(...data.map((d) => d.year))
+  const year1 = Math.max(...data.map((d) => d.year))
+  const max = Math.max(...data.map((d) => d.people))
 
-  const birth_years = range(year0 - age1, year1, 5);
-  const ages = range(0, age1, 5);
+  const birth_years = range(year0 - age1, year1, 5)
+  const ages = range(0, age1, 5)
 
-  let year = year1;
-  let el;
-  let w = 320;
+  let year = year1
+  let el
+  let w = 320
 
   function range(a, b, step) {
-    const array = [];
-    for (; a <= b; a += step) array.push(a);
-    return array;
+    const array = []
+    for (; a <= b; a += step) array.push(a)
+    return array
   }
 
   function format(num) {
-    return num ? `${num / 1e6}M` : "";
+    return num ? `${num / 1e6}M` : ''
   }
 
   function get_populations(year, sex) {
     return birth_years.map((birth_year) => {
       const d = selection.find(
         (d) => d.sex === sex && d.age === year - birth_year
-      );
+      )
       return {
         x: birth_year,
         y: d ? d.people : 0,
-      };
-    });
+      }
+    })
   }
 
-  const x1 = spring();
-  const x2 = spring();
-  const m = spring();
-  const f = spring();
+  const x1 = spring()
+  const x2 = spring()
+  const m = spring()
+  const f = spring()
 
-  $: $x2 = year;
-  $: $x1 = year - age1;
-  $: selection = data.filter((d) => d.year === year);
-  $: $m = get_populations(year, 1);
-  $: $f = get_populations(year, 2);
-  $: size = w < 480 ? "small" : w < 640 ? "medium" : "large";
+  $: $x2 = year
+  $: $x1 = year - age1
+  $: selection = data.filter((d) => d.year === year)
+  $: $m = get_populations(year, 1)
+  $: $f = get_populations(year, 2)
+  $: size = w < 480 ? 'small' : w < 640 ? 'medium' : 'large'
 
   const handle_pointerdown = (e) => {
-    if (!e.isPrimary) return;
+    if (!e.isPrimary) return
 
-    const start_x = e.clientX;
-    const start_value = year;
+    const start_x = e.clientX
+    const start_value = year
 
     const handle_pointermove = (e) => {
-      if (!e.isPrimary) return;
+      if (!e.isPrimary) return
 
-      const d = e.clientX - start_x;
+      const d = e.clientX - start_x
 
       const step = Math.min(
         10,
         d > 0
           ? (window.innerWidth - start_x) / (year1 - start_value)
           : start_x / (start_value - year0)
-      );
+      )
 
-      const n = Math.round(d / step);
+      const n = Math.round(d / step)
       year = Math.max(
         year0,
         Math.min(year1, start_value + Math.round(n * 0.1) * 10)
-      );
-    };
+      )
+    }
 
     const handle_pointerup = (e) => {
-      if (!e.isPrimary) return;
+      if (!e.isPrimary) return
 
-      window.removeEventListener("pointermove", handle_pointermove);
-      window.removeEventListener("pointerup", handle_pointerup);
-    };
+      window.removeEventListener('pointermove', handle_pointermove)
+      window.removeEventListener('pointerup', handle_pointerup)
+    }
 
-    window.addEventListener("pointermove", handle_pointermove);
-    window.addEventListener("pointerup", handle_pointerup);
-  };
+    window.addEventListener('pointermove', handle_pointermove)
+    window.addEventListener('pointerup', handle_pointerup)
+  }
 
   const handle_resize = () => {
     // normally we'd just use bind:clientWidth={w} on the element,
     // but that fails in the REPL because of iframe restrictions
-    w = el.clientWidth;
-  };
+    w = el.clientWidth
+  }
 
-  onMount(handle_resize);
+  onMount(handle_resize)
 </script>
 
 <style>
@@ -125,8 +125,8 @@
   .slider-container span {
     display: block;
     font-size: 2em;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-variant-numeric: tabular-nums;
     text-shadow: 0 0 12px white, 0 0 12px white, 0 0 12px white, 0 0 12px white,
       0 0 12px white, 0 0 12px white;

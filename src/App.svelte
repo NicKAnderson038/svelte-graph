@@ -1,6 +1,7 @@
 <script>
-  export let name;
-  import Graph from "./Graph.svelte";
+  import Router from 'svelte-spa-router'
+  // Import the list of routes
+  import routes from './routes'
 </script>
 
 <style>
@@ -10,14 +11,6 @@
     max-width: 240px;
     margin: 0 auto;
   }
-
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
-  }
-
   @media (min-width: 640px) {
     main {
       max-width: none;
@@ -26,6 +19,10 @@
 </style>
 
 <main>
-  <h1>Pancake {name}!</h1>
-  <Graph />
+  <div>
+    <a href="#/">Home</a> |
+    <a href="#/graph">Graph</a> |
+    <a href="#/does/not/exist">Not found</a>
+  </div>
+  <Router {routes} />
 </main>
