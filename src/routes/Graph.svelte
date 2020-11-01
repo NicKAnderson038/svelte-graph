@@ -217,7 +217,6 @@
   }
 </style>
 
-c
 <svelte:window on:resize={handle_resize} />
 
 <div class="chart {size}" bind:this={el}>
